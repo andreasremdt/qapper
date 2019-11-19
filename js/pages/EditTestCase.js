@@ -5,9 +5,12 @@ import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
 import Alert from "../components/Alert";
 import http from "../http";
+import GlobalContext from "../contexts/GlobalContext";
 
 class EditTestCase extends Component {
-  state = { groups: [], loading: true };
+  state = { groups: [], loading: true, buttonDisabled: false };
+
+  static contextType = GlobalContext;
 
   componentDidMount() {
     http.get("action-group").then(groups => {
@@ -24,7 +27,11 @@ class EditTestCase extends Component {
       })
     );
 
-    http.delete(`action-group/${groupId}`).catch(() => {});
+    http.delete(`action-group/${groupId}`).catch(() => {
+      this.context.setError(
+        "Could not delete this group. Please try again later."
+      );
+    });
   };
 
   handleRenameGroup = (groupId, index, newName) => {
@@ -36,19 +43,33 @@ class EditTestCase extends Component {
       })
     );
 
-    http
-      .patch(`action-group/${groupId}`, { name: newName })
-      .catch(err => console.log(err));
+    http.patch(`action-group/${groupId}`, { name: newName }).catch(() => {
+      this.context.setError(
+        "Could not update this group's name. Please try again later."
+      );
+    });
   };
 
   handleAddGroup = () => {
-    http.post("action-group", { name: "Empty Group" }).then(group => {
-      this.setState(
-        update(this.state, {
-          groups: { $push: [group] }
-        })
-      );
-    });
+    this.setState({ buttonDisabled: true });
+
+    http
+      .post("action-group", { name: "Empty Group" })
+      .then(group => {
+        this.setState(prevState =>
+          update(prevState, {
+            groups: { $push: [group] },
+            buttonDisabled: { $set: false }
+          })
+        );
+      })
+      .catch(() => {
+        this.context.setError(
+          "Could not add a new group. Please try again later."
+        );
+
+        this.setState({ buttonDisabled: false });
+      });
   };
 
   render() {
@@ -74,7 +95,12 @@ class EditTestCase extends Component {
                   onRename={this.handleRenameGroup}
                 />
               ))}
-              <Button onClick={this.handleAddGroup}>Add Group</Button>
+              <Button
+                onClick={this.handleAddGroup}
+                disabled={this.state.buttonDisabled}
+              >
+                {this.state.buttonDisabled ? "Adding group..." : "Add Group"}
+              </Button>
             </Fragment>
           ) : (
             <Alert type="info" loading>

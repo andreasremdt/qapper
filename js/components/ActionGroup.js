@@ -33,7 +33,7 @@ class ActionGroup extends Component {
   handleLeaveEdit = newName => {
     this.setState({ editing: false });
 
-    if (newName) {
+    if (newName && newName != this.props.group.name) {
       this.props.onRename(this.props.group.id, this.props.index, newName);
     }
   };
