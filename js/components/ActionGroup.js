@@ -21,7 +21,7 @@ class ActionGroup extends Component {
   handleRemove = () => {
     localStorage.removeItem(this.groupKey);
 
-    this.props.onRemove(this.props.index);
+    this.props.onRemove(this.props.group.id, this.props.index);
   };
 
   handleEnterEdit = evt => {
@@ -34,7 +34,7 @@ class ActionGroup extends Component {
     this.setState({ editing: false });
 
     if (newName) {
-      this.props.onRename(this.props.index, newName);
+      this.props.onRename(this.props.group.id, this.props.index, newName);
     }
   };
 
@@ -82,7 +82,7 @@ class ActionGroup extends Component {
         </summary>
 
         <div className="border border-solid border-gray-100 p-2">
-          {this.props.group.items.map(item => (
+          {this.props.group.actionItems.map(item => (
             <ActionItem
               name={item.name}
               description={item.description}

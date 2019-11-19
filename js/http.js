@@ -14,17 +14,15 @@ class HTTP {
       headers: {
         "Content-Type": "application/json"
       }
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-
-        console.error(response);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(
+          `Network request failed because the server responded with a status of ${response.status}.`
+        );
+      }
+    });
   }
 
   get(path) {

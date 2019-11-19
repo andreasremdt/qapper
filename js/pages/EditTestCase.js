@@ -3,73 +3,52 @@ import update from "immutability-helper";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
-
-const INITIAL_STATE = {
-  groups: [
-    {
-      id: "534",
-      name: "Login",
-      items: [
-        {
-          id: "346456",
-          name: "a user can login",
-          description: ""
-        },
-        {
-          id: "34644",
-          name: "a user can't login with invalid credentials",
-          description: ""
-        },
-        {
-          id: "346442",
-          name: "a user can reset his password",
-          description: "Only valid for certain pages"
-        }
-      ]
-    },
-    {
-      id: "45435",
-      name: "Some other group",
-      items: []
-    }
-  ]
-};
+import Alert from "../components/Alert";
+import http from "../http";
 
 class EditTestCase extends Component {
-  state = INITIAL_STATE;
+  state = { groups: [], loading: true };
 
-  handleRemoveGroup = index => {
-    this.setState(prevState => {
-      return update(prevState, {
+  componentDidMount() {
+    http.get("action-group").then(groups => {
+      this.setState({ groups });
+    });
+  }
+
+  handleRemoveGroup = (groupId, index) => {
+    this.setState(prevState =>
+      update(prevState, {
         groups: {
           $splice: [[index, 1]]
         }
-      });
-    });
+      })
+    );
+
+    http.delete(`action-group/${groupId}`).catch(() => {});
   };
 
-  handleRenameGroup = (index, newName) => {
-    this.setState(prevState => {
-      return update(prevState, {
+  handleRenameGroup = (groupId, index, newName) => {
+    this.setState(prevState =>
+      update(prevState, {
         groups: {
           [index]: { name: { $set: newName } }
         }
-      });
-    });
+      })
+    );
+
+    http
+      .patch(`action-group/${groupId}`, { name: newName })
+      .catch(err => console.log(err));
   };
 
   handleAddGroup = () => {
-    var emptyGroup = {
-      id: "5454545",
-      name: "Empty Group",
-      items: []
-    };
-
-    this.setState(
-      update(this.state, {
-        groups: { $push: [emptyGroup] }
-      })
-    );
+    http.post("action-group", { name: "Empty Group" }).then(group => {
+      this.setState(
+        update(this.state, {
+          groups: { $push: [group] }
+        })
+      );
+    });
   };
 
   render() {
@@ -84,16 +63,24 @@ class EditTestCase extends Component {
         </Card>
 
         <Card title="Groups">
-          {this.state.groups.map((group, index) => (
-            <ActionGroup
-              group={group}
-              index={index}
-              key={group.id}
-              onRemove={this.handleRemoveGroup}
-              onRename={this.handleRenameGroup}
-            />
-          ))}
-          <Button onClick={this.handleAddGroup}>Add Group</Button>
+          {this.state.groups && this.state.groups.length ? (
+            <Fragment>
+              {this.state.groups.map((group, index) => (
+                <ActionGroup
+                  group={group}
+                  index={index}
+                  key={group.id}
+                  onRemove={this.handleRemoveGroup}
+                  onRename={this.handleRenameGroup}
+                />
+              ))}
+              <Button onClick={this.handleAddGroup}>Add Group</Button>
+            </Fragment>
+          ) : (
+            <Alert type="info" loading>
+              Loading your data...
+            </Alert>
+          )}
         </Card>
       </Fragment>
     );
