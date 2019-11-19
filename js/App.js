@@ -13,7 +13,7 @@ function App() {
       <Header />
       <Navigation />
 
-      <main>
+      <main className="container mx-auto mt-6">
         <Router>
           <Dashboard path="/" />
           <NewTestCase path="/testcases/create" />
