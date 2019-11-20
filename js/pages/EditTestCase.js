@@ -13,12 +13,19 @@ class EditTestCase extends Component {
   static contextType = GlobalContext;
 
   componentDidMount() {
-    http.get("action-group").then(groups => {
-      this.setState({ groups });
-    });
+    http
+      .get("action-group")
+      .then(groups => {
+        this.setState({ groups });
+      })
+      .catch(() => {
+        this.context.setError(
+          "Could not fetch your groups. Please try again later."
+        );
+      });
   }
 
-  handleRemoveGroup = (groupId, index) => {
+  handleRemoveGroup = index => {
     this.setState(prevState =>
       update(prevState, {
         groups: {
@@ -26,28 +33,16 @@ class EditTestCase extends Component {
         }
       })
     );
-
-    http.delete(`action-group/${groupId}`).catch(() => {
-      this.context.setError(
-        "Could not delete this group. Please try again later."
-      );
-    });
   };
 
-  handleRenameGroup = (groupId, index, newName) => {
+  handleRenameGroup = (index, name) => {
     this.setState(prevState =>
       update(prevState, {
         groups: {
-          [index]: { name: { $set: newName } }
+          [index]: { name: { $set: name } }
         }
       })
     );
-
-    http.patch(`action-group/${groupId}`, { name: newName }).catch(() => {
-      this.context.setError(
-        "Could not update this group's name. Please try again later."
-      );
-    });
   };
 
   handleAddGroup = () => {
@@ -97,7 +92,7 @@ class EditTestCase extends Component {
               ))}
               <Button
                 onClick={this.handleAddGroup}
-                disabled={this.state.buttonDisabled}
+                loading={this.state.buttonDisabled}
               >
                 {this.state.buttonDisabled ? "Adding group..." : "Add Group"}
               </Button>

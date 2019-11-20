@@ -1,10 +1,13 @@
 import { h, Component } from "preact";
 import ActionItem from "../components/ActionItem";
-import Icon from "../components/Icon";
+import Button from "../components/Button";
 import InlineEditable from "../components/InlineEditable";
+import http from "../http";
 
 const INITIAL_STATE = {
-  editing: false
+  editing: false,
+  buttonDeleteDisabled: false,
+  buttonEditDisabled: false
 };
 
 class ActionGroup extends Component {
@@ -19,9 +22,22 @@ class ActionGroup extends Component {
   };
 
   handleRemove = () => {
+    this.setState({ buttonDeleteDisabled: true });
+
     localStorage.removeItem(this.groupKey);
 
-    this.props.onRemove(this.props.group.id, this.props.index);
+    http
+      .delete(`action-group/${this.props.group.id}`)
+      .then(() => {
+        this.props.onRemove(this.props.index);
+      })
+      .catch(() => {
+        this.setState({ buttonDeleteDisabled: false });
+
+        this.context.setError(
+          "Could not delete this group. Please try again later."
+        );
+      });
   };
 
   handleEnterEdit = evt => {
@@ -30,11 +46,25 @@ class ActionGroup extends Component {
     this.setState({ editing: true });
   };
 
-  handleLeaveEdit = newName => {
+  handleLeaveEdit = name => {
     this.setState({ editing: false });
 
-    if (newName && newName != this.props.group.name) {
-      this.props.onRename(this.props.group.id, this.props.index, newName);
+    if (name && name != this.props.group.name) {
+      this.setState({ buttonEditDisabled: true });
+
+      http
+        .patch(`action-group/${this.props.group.id}`, { name })
+        .then(() => {
+          this.props.onRename(this.props.index, name);
+        })
+        .catch(() => {
+          this.context.setError(
+            "Could not update this group's name. Please try again later."
+          );
+        })
+        .finally(() => {
+          this.setState({ buttonEditDisabled: false });
+        });
     }
   };
 
@@ -55,30 +85,21 @@ class ActionGroup extends Component {
           >
             {this.props.group.name}
           </InlineEditable>
-          <button
-            type="button"
-            className="ml-auto mr-3 text-gray-600 hover:text-blue-500"
+
+          <Button
+            icon="edit"
+            simple
             onClick={this.handleEnterEdit}
-          >
-            <Icon
-              className="pointer-events-none"
-              width="18"
-              height="18"
-              icon="edit"
-            />
-          </button>
-          <button
-            type="button"
-            className="text-gray-600 hover:text-red-400"
+            loading={this.state.buttonEditDisabled}
+            className="ml-auto mr-3"
+          />
+          <Button
+            variant="danger"
+            icon="trash"
+            simple
             onClick={this.handleRemove}
-          >
-            <Icon
-              className="pointer-events-none"
-              width="18"
-              height="18"
-              icon="trash"
-            />
-          </button>
+            loading={this.state.buttonDeleteDisabled}
+          />
         </summary>
 
         <div className="border border-solid border-gray-100 p-2">
