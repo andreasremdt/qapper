@@ -1,28 +1,59 @@
 import { h, Component } from "preact";
-import Icon from "../components/Icon";
+import Button from "../components/Button";
+import http from "../http";
 
 class ActionItem extends Component {
+  handleRemove = () => {
+    http
+      .delete(`action-item/${this.props.item.id}`)
+      .then(() => {
+        this.props.onRemoveItem(this.props.groupIndex, this.props.itemIndex);
+      })
+      .catch(() => {
+        this.context.setError(
+          "Could not delete this item. Please try again later."
+        );
+      });
+  };
+
+  handleEdit = evt => {
+    http
+      .patch(`action-item/${this.props.item.id}`, { name: evt.target.value })
+      .then(item => {
+        // TODO: don't set the entire item, because it contains some strange properties like actionGroup
+        this.props.onRenameItem(
+          this.props.groupIndex,
+          this.props.itemIndex,
+          item
+        );
+      })
+      .catch(() => {
+        this.context.setError(
+          "Could not update this item's name. Please try again later."
+        );
+      });
+  };
+
   render() {
     return (
       <div className="flex items-center mb-1">
         <input
           className="w-2/4 px-2 border border-solid border-gray-300 rounded-sm mr-2 text-gray-700 hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
-          value={this.props.name}
+          value={this.props.item.name}
           placeholder="Enter an action name"
+          onBlur={this.handleEdit}
         />
         <input
           className="w-2/4 px-2 border border-solid border-gray-300 rounded-sm mr-2 text-gray-700 hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
-          value={this.props.description}
+          value={this.props.item.description}
           placeholder="Enter an action description"
         />
-        <button type="button" className="text-gray-600 hover:text-red-400">
-          <Icon
-            className="pointer-events-none"
-            width="18"
-            height="18"
-            icon="trash"
-          />
-        </button>
+        <Button
+          variant="danger"
+          icon="trash"
+          simple
+          onClick={this.handleRemove}
+        />
       </div>
     );
   }

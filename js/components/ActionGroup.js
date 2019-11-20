@@ -40,6 +40,22 @@ class ActionGroup extends Component {
       });
   };
 
+  handleItemAdd = () => {
+    http
+      .post("action-item", {
+        name: "Untitled",
+        actionGroupId: this.props.group.id
+      })
+      .then(item => {
+        this.props.onAddItem(this.props.index, item);
+      })
+      .catch(() => {
+        this.context.setError(
+          "Could not add a new group. Please try again later."
+        );
+      });
+  };
+
   handleEnterEdit = evt => {
     evt.stopPropagation();
 
@@ -103,13 +119,18 @@ class ActionGroup extends Component {
         </summary>
 
         <div className="border border-solid border-gray-100 p-2">
-          {this.props.group.actionItems.map(item => (
+          {this.props.group.actionItems.map((item, index) => (
             <ActionItem
-              name={item.name}
-              description={item.description}
+              item={item}
+              itemIndex={index}
+              groupIndex={this.props.index}
               key={item.id}
+              onRemoveItem={this.props.onRemoveItem}
+              onRenameItem={this.props.onRenameItem}
             />
           ))}
+
+          <Button onClick={this.handleItemAdd}>Add Item</Button>
         </div>
       </details>
     );

@@ -67,6 +67,36 @@ class EditTestCase extends Component {
       });
   };
 
+  handleAddItem = (index, item) => {
+    this.setState(prevState =>
+      update(prevState, {
+        groups: {
+          [index]: { actionItems: { $push: [item] } }
+        }
+      })
+    );
+  };
+
+  handleRemoveItem = (groupIndex, itemIndex) => {
+    this.setState(prevState =>
+      update(prevState, {
+        groups: {
+          [groupIndex]: { actionItems: { $splice: [[itemIndex, 1]] } }
+        }
+      })
+    );
+  };
+
+  handleRenameItem = (groupIndex, itemIndex, item) => {
+    this.setState(prevState =>
+      update(prevState, {
+        groups: {
+          [groupIndex]: { actionItems: { [itemIndex]: { $set: item } } }
+        }
+      })
+    );
+  };
+
   render() {
     return (
       <Fragment>
@@ -88,6 +118,9 @@ class EditTestCase extends Component {
                   key={group.id}
                   onRemove={this.handleRemoveGroup}
                   onRename={this.handleRenameGroup}
+                  onAddItem={this.handleAddItem}
+                  onRemoveItem={this.handleRemoveItem}
+                  onRenameItem={this.handleRenameItem}
                 />
               ))}
               <Button
