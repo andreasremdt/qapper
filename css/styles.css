@@ -31,3 +31,7 @@ body {
 
   @apply text-gray-800 antialiased;
 }
+
+.bg-header {
+  background: linear-gradient(to right, #186faf, #0a558c);
+}

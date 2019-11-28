@@ -6,13 +6,13 @@ import Icon from "./Icon";
 
 function Header() {
   return (
-    <header className="bg-white border-b border-solid border-gray-300">
-      <div className="container mx-auto py-3 flex items-center">
+    <header className="bg-header">
+      <div className="container mx-auto py-3 flex items-center shadow">
         <Icon
           icon="logo"
           width="20"
           height="20"
-          className="bg-blue-500 text-white p-1 content-box rounded-sm mr-8"
+          className="bg-white text-blue-800 p-1 content-box rounded-sm mr-8"
         />
 
         <Navigation />

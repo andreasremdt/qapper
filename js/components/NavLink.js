@@ -6,8 +6,8 @@ function NavLink({ href, children, icon }) {
   return (
     <Link
       href={href}
-      className="flex items-center text-gray-800 mr-6"
-      activeClassName="text-blue-500"
+      className="flex items-center text-blue-200 mr-6 font-semibold hover:text-white"
+      activeClassName="text-white"
     >
       <Icon width="16" height="16" className="mr-2" icon={icon} />
       {children}
