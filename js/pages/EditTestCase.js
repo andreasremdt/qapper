@@ -1,100 +1,41 @@
 import { h, Component, Fragment } from "preact";
-import update from "immutability-helper";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
 import Alert from "../components/Alert";
 import http from "../http";
-import GlobalContext from "../contexts/GlobalContext";
+import TestCaseContext from "../contexts/TestCaseContext";
 
 class EditTestCase extends Component {
-  state = { groups: [], loading: true, buttonDisabled: false };
+  state = { buttonDisabled: false };
 
-  static contextType = GlobalContext;
+  static contextType = TestCaseContext;
 
   componentDidMount() {
     http
       .get("action-group")
-      .then(groups => {
-        this.setState({ groups });
-      })
+      .then(this.context.init)
       .catch(() => {
-        this.context.setError(
-          "Could not fetch your groups. Please try again later."
-        );
+        // this.context.setError(
+        //   "Could not fetch your groups. Please try again later."
+        // );
       });
   }
-
-  handleRemoveGroup = index => {
-    this.setState(prevState =>
-      update(prevState, {
-        groups: {
-          $splice: [[index, 1]]
-        }
-      })
-    );
-  };
-
-  handleRenameGroup = (index, name) => {
-    this.setState(prevState =>
-      update(prevState, {
-        groups: {
-          [index]: { name: { $set: name } }
-        }
-      })
-    );
-  };
 
   handleAddGroup = () => {
     this.setState({ buttonDisabled: true });
 
     http
       .post("action-group", { name: "Empty Group" })
-      .then(group => {
-        this.setState(prevState =>
-          update(prevState, {
-            groups: { $push: [group] },
-            buttonDisabled: { $set: false }
-          })
-        );
-      })
+      .then(this.context.addGroup)
       .catch(() => {
-        this.context.setError(
-          "Could not add a new group. Please try again later."
-        );
-
+        // this.context.setError(
+        //   "Could not add a new group. Please try again later."
+        // );
+      })
+      .finally(() => {
         this.setState({ buttonDisabled: false });
       });
-  };
-
-  handleAddItem = (index, item) => {
-    this.setState(prevState =>
-      update(prevState, {
-        groups: {
-          [index]: { actionItems: { $push: [item] } }
-        }
-      })
-    );
-  };
-
-  handleRemoveItem = (groupIndex, itemIndex) => {
-    this.setState(prevState =>
-      update(prevState, {
-        groups: {
-          [groupIndex]: { actionItems: { $splice: [[itemIndex, 1]] } }
-        }
-      })
-    );
-  };
-
-  handleRenameItem = (groupIndex, itemIndex, item) => {
-    this.setState(prevState =>
-      update(prevState, {
-        groups: {
-          [groupIndex]: { actionItems: { [itemIndex]: { $set: item } } }
-        }
-      })
-    );
   };
 
   render() {
@@ -109,19 +50,10 @@ class EditTestCase extends Component {
         </Card>
 
         <Card title="Groups">
-          {this.state.groups && this.state.groups.length ? (
+          {this.context.groups.length ? (
             <Fragment>
-              {this.state.groups.map((group, index) => (
-                <ActionGroup
-                  group={group}
-                  index={index}
-                  key={group.id}
-                  onRemove={this.handleRemoveGroup}
-                  onRename={this.handleRenameGroup}
-                  onAddItem={this.handleAddItem}
-                  onRemoveItem={this.handleRemoveItem}
-                  onRenameItem={this.handleRenameItem}
-                />
+              {this.context.groups.map((group, index) => (
+                <ActionGroup group={group} index={index} key={group.id} />
               ))}
               <Button
                 onClick={this.handleAddGroup}

@@ -2,18 +2,19 @@ import { h, Component } from "preact";
 import ActionItem from "../components/ActionItem";
 import Button from "../components/Button";
 import InlineEditable from "../components/InlineEditable";
+import TestCaseContext from "../contexts/TestCaseContext";
 import http from "../http";
-
-const INITIAL_STATE = {
-  editing: false,
-  buttonDeleteDisabled: false,
-  buttonEditDisabled: false
-};
 
 class ActionGroup extends Component {
   groupKey = `group.${this.props.group.id}.open`;
 
-  state = INITIAL_STATE;
+  state = {
+    editing: false,
+    buttonDeleteDisabled: false,
+    buttonEditDisabled: false
+  };
+
+  static contextType = TestCaseContext;
 
   handleToggle = () => {
     var isOpen = localStorage.getItem(this.groupKey) == "true";
@@ -28,15 +29,13 @@ class ActionGroup extends Component {
 
     http
       .delete(`action-group/${this.props.group.id}`)
-      .then(() => {
-        this.props.onRemove(this.props.index);
-      })
+      .then(() => this.context.removeGroup(this.props.index))
       .catch(() => {
         this.setState({ buttonDeleteDisabled: false });
 
-        this.context.setError(
-          "Could not delete this group. Please try again later."
-        );
+        // this.context.setError(
+        //   "Could not delete this group. Please try again later."
+        // );
       });
   };
 
@@ -46,13 +45,11 @@ class ActionGroup extends Component {
         name: "Untitled",
         actionGroupId: this.props.group.id
       })
-      .then(item => {
-        this.props.onAddItem(this.props.index, item);
-      })
+      .then(item => this.context.addItem(this.props.index, item))
       .catch(() => {
-        this.context.setError(
-          "Could not add a new group. Please try again later."
-        );
+        // this.context.setError(
+        //   "Could not add a new group. Please try again later."
+        // );
       });
   };
 
@@ -62,7 +59,7 @@ class ActionGroup extends Component {
     this.setState({ editing: true });
   };
 
-  handleLeaveEdit = name => {
+  handleRename = name => {
     this.setState({ editing: false });
 
     if (name && name != this.props.group.name) {
@@ -70,13 +67,11 @@ class ActionGroup extends Component {
 
       http
         .patch(`action-group/${this.props.group.id}`, { name })
-        .then(() => {
-          this.props.onRename(this.props.index, name);
-        })
+        .then(() => this.context.renameGroup(this.props.index, name))
         .catch(() => {
-          this.context.setError(
-            "Could not update this group's name. Please try again later."
-          );
+          // this.context.setError(
+          //   "Could not update this group's name. Please try again later."
+          // );
         })
         .finally(() => {
           this.setState({ buttonEditDisabled: false });
@@ -97,7 +92,7 @@ class ActionGroup extends Component {
         >
           <InlineEditable
             editing={this.state.editing}
-            onEnter={this.handleLeaveEdit}
+            onEnter={this.handleRename}
           >
             {this.props.group.name}
           </InlineEditable>
@@ -125,8 +120,6 @@ class ActionGroup extends Component {
               itemIndex={index}
               groupIndex={this.props.index}
               key={item.id}
-              onRemoveItem={this.props.onRemoveItem}
-              onRenameItem={this.props.onRenameItem}
             />
           ))}
 

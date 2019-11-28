@@ -9,6 +9,7 @@ import Navigation from "./components/Navigation";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ErrorMessage from "./components/ErrorMessage";
 import { ContextWrapper } from "./contexts/GlobalContext";
+import { TestCaseContextWrapper } from "./contexts/TestCaseContext";
 
 function App() {
   return (
@@ -20,12 +21,14 @@ function App() {
         <main className="container mx-auto mt-6">
           <ErrorMessage />
 
-          <Router>
-            <Dashboard path="/" />
-            <NewTestCase path="/testcases/create" />
-            <ViewTestCase path="/testcases/:id" />
-            <EditTestCase path="/testcases/:id/edit" />
-          </Router>
+          <TestCaseContextWrapper>
+            <Router>
+              <Dashboard path="/" />
+              <NewTestCase path="/testcases/create" />
+              <ViewTestCase path="/testcases/:id" />
+              <EditTestCase path="/testcases/:id/edit" />
+            </Router>
+          </TestCaseContextWrapper>
         </main>
       </ContextWrapper>
     </ErrorBoundary>

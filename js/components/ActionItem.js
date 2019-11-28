@@ -1,18 +1,21 @@
 import { h, Component } from "preact";
 import Button from "../components/Button";
+import TestCaseContext from "../contexts/TestCaseContext";
 import http from "../http";
 
 class ActionItem extends Component {
+  static contextType = TestCaseContext;
+
   handleRemove = () => {
     http
       .delete(`action-item/${this.props.item.id}`)
-      .then(() => {
-        this.props.onRemoveItem(this.props.groupIndex, this.props.itemIndex);
-      })
+      .then(() =>
+        this.context.removeItem(this.props.groupIndex, this.props.itemIndex)
+      )
       .catch(() => {
-        this.context.setError(
-          "Could not delete this item. Please try again later."
-        );
+        // this.context.setError(
+        //   "Could not delete this item. Please try again later."
+        // );
       });
   };
 
@@ -21,16 +24,16 @@ class ActionItem extends Component {
       .patch(`action-item/${this.props.item.id}`, { name: evt.target.value })
       .then(item => {
         // TODO: don't set the entire item, because it contains some strange properties like actionGroup
-        this.props.onRenameItem(
+        this.context.renameItem(
           this.props.groupIndex,
           this.props.itemIndex,
           item
         );
       })
       .catch(() => {
-        this.context.setError(
-          "Could not update this item's name. Please try again later."
-        );
+        // this.context.setError(
+        //   "Could not update this item's name. Please try again later."
+        // );
       });
   };
 
