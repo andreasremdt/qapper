@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rm -rf dist",
-    "start": "parcel index.html",
+    "dev": "parcel index.html",
+    "start": "serve -s dist/",
     "build": "parcel build index.html"
   },
   "keywords": [],
@@ -20,6 +21,7 @@
     "immutability-helper": "^3.0.1",
     "preact": "^10.0.5",
     "preact-router": "^3.1.0",
+    "serve": "^11.2.0",
     "tailwindcss": "^1.1.3"
   }
 }
