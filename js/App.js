@@ -5,7 +5,6 @@ import NewTestCase from "./pages/NewTestCase";
 import ViewTestCase from "./pages/ViewTestCase";
 import EditTestCase from "./pages/EditTestCase";
 import Header from "./components/Header";
-import Navigation from "./components/Navigation";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { TestCaseContextWrapper } from "./contexts/TestCaseContext";
 
@@ -13,7 +12,6 @@ function App() {
   return (
     <ErrorBoundary>
       <Header />
-      <Navigation />
 
       <main className="container mx-auto mt-6">
         <TestCaseContextWrapper>

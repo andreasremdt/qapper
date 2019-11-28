@@ -18,6 +18,10 @@
   animation: rotate 1.5s linear infinite;
 }
 
+.content-box {
+  box-sizing: content-box;
+}
+
 body {
   direction: ltr;
   font-feature-settings: "liga" 0;
