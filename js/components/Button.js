@@ -40,7 +40,8 @@ function Button({
   loading,
   simple,
   className,
-  type = "button"
+  type = "button",
+  ...props
 }) {
   var colors = getColors(variant, simple);
 
@@ -56,6 +57,7 @@ function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
+      {...props}
     >
       {(icon || loading) && (
         <Icon

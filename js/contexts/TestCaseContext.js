@@ -58,11 +58,13 @@ class TestCaseContextWrapper extends Component {
     );
   };
 
-  renameItem = (groupIndex, itemIndex, item) => {
+  renameItem = (groupIndex, itemIndex, { name, description }) => {
     this.setState(prevState =>
       update(prevState, {
         groups: {
-          [groupIndex]: { actionItems: { [itemIndex]: { $set: item } } }
+          [groupIndex]: {
+            actionItems: { [itemIndex]: { $merge: { name, description } } }
+          }
         }
       })
     );

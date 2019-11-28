@@ -7,15 +7,16 @@ import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
 class ActionGroup extends Component {
+  static contextType = TestCaseContext;
+
   groupKey = `group.${this.props.group.id}.open`;
 
   state = {
     editing: false,
-    buttonDeleteDisabled: false,
-    buttonEditDisabled: false
+    buttonDeleteLoading: false,
+    buttonEditLoading: false,
+    buttonAddItemLoading: false
   };
-
-  static contextType = TestCaseContext;
 
   handleToggle = () => {
     var isOpen = localStorage.getItem(this.groupKey) == "true";
@@ -24,7 +25,7 @@ class ActionGroup extends Component {
   };
 
   handleRemove = () => {
-    this.setState({ buttonDeleteDisabled: true });
+    this.setState({ buttonDeleteLoading: true });
 
     http
       .delete(`action-group/${this.props.group.id}`)
@@ -33,7 +34,7 @@ class ActionGroup extends Component {
         localStorage.removeItem(this.groupKey);
       })
       .catch(() => {
-        this.setState({ buttonDeleteDisabled: false });
+        this.setState({ buttonDeleteLoading: false });
 
         this.props.displayError(
           "Could not delete this group. Please try again later."
@@ -41,7 +42,11 @@ class ActionGroup extends Component {
       });
   };
 
-  handleItemAdd = () => {
+  handleItemAdd = evt => {
+    evt.stopPropagation();
+
+    this.setState({ buttonAddItemLoading: true });
+
     http
       .post("action-item", {
         name: "Untitled",
@@ -52,20 +57,19 @@ class ActionGroup extends Component {
         this.props.displayError(
           "Could not add a new group. Please try again later."
         )
-      );
+      )
+      .finally(() => this.setState({ buttonAddItemLoading: false }));
   };
 
-  handleEnterEdit = evt => {
+  handleToggleEditing = evt => {
     evt.stopPropagation();
 
-    this.setState({ editing: true });
+    this.setState(prevState => ({ editing: !prevState.editing }));
   };
 
   handleRename = name => {
-    this.setState({ editing: false });
-
     if (name && name != this.props.group.name) {
-      this.setState({ buttonEditDisabled: true });
+      this.setState({ buttonEditLoading: true });
 
       http
         .patch(`action-group/${this.props.group.id}`, { name })
@@ -76,7 +80,7 @@ class ActionGroup extends Component {
           )
         )
         .finally(() => {
-          this.setState({ buttonEditDisabled: false });
+          this.setState({ buttonEditLoading: false, editing: false });
         });
     }
   };
@@ -86,46 +90,60 @@ class ActionGroup extends Component {
   }
 
   render() {
+    var { group } = this.props;
+
     return (
       <details className="mb-2" open={this.open}>
         <summary
-          className="bg-gray-100 hover:bg-gray-200 font-semibold p-2 cursor-pointer flex"
+          className="bg-gray-100 hover:bg-gray-200 font-semibold p-2 cursor-pointer flex rounded-t-sm"
           onClick={this.handleToggle}
         >
           <InlineEditable
             editing={this.state.editing}
             onEnter={this.handleRename}
           >
-            {this.props.group.name}
+            {group.name}
           </InlineEditable>
 
           <Button
+            icon="plus"
+            simple
+            className="ml-auto mr-3"
+            title="Add new action item"
+            onClick={this.handleItemAdd}
+            loading={this.state.buttonAddItemLoading}
+          />
+          <Button
             icon="edit"
             simple
-            onClick={this.handleEnterEdit}
-            loading={this.state.buttonEditDisabled}
-            className="ml-auto mr-3"
+            onClick={this.handleToggleEditing}
+            title="Edit group's name"
+            loading={this.state.buttonEditLoading}
+            className="mr-3"
           />
           <Button
             variant="danger"
             icon="trash"
             simple
             onClick={this.handleRemove}
-            loading={this.state.buttonDeleteDisabled}
+            title="Remove this group"
+            loading={this.state.buttonDeleteLoading}
           />
         </summary>
 
         <div className="border border-solid border-gray-100 p-2">
-          {this.props.group.actionItems.map((item, index) => (
-            <ActionItem
-              item={item}
-              itemIndex={index}
-              groupIndex={this.props.index}
-              key={item.id}
-            />
-          ))}
-
-          <Button onClick={this.handleItemAdd}>Add Item</Button>
+          {group.actionItems.length ? (
+            group.actionItems.map((item, index) => (
+              <ActionItem
+                item={item}
+                itemIndex={index}
+                groupIndex={this.props.index}
+                key={item.id}
+              />
+            ))
+          ) : (
+            <p>There no items yet.</p>
+          )}
         </div>
       </details>
     );
