@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rm -rf dist",
-    "dev": "parcel serve index.html",
+    "dev": "parcel serve index.html --no-cache",
     "start": "serve -s dist/",
     "build": "parcel build index.html"
   },
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@fullhuman/postcss-purgecss": "^1.3.0",
     "parcel-bundler": "^1.12.4"
   },
   "dependencies": {
