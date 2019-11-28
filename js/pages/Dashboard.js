@@ -2,11 +2,14 @@ import { h, Component, Fragment } from "preact";
 import { Link } from "preact-router/match";
 import Icon from "../components/Icon";
 import Button from "../components/Button";
+import PageHeader from "../components/PageHeader";
 
 class Dashboard extends Component {
   render() {
     return (
       <Fragment>
+        <PageHeader>Dashboard</PageHeader>
+
         <details
           className="border border-solid border-gray-300 bg-white mb-2 rounded-sm"
           open

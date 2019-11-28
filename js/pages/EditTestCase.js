@@ -3,6 +3,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
 import Alert from "../components/Alert";
+import PageHeader from "../components/PageHeader";
 import http from "../http";
 import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";
@@ -42,9 +43,7 @@ class EditTestCase extends Component {
   render() {
     return (
       <Fragment>
-        <header className="mb-4">
-          <h1 className="text-xl">Edit Testcase</h1>
-        </header>
+        <PageHeader>Edit Testcase</PageHeader>
 
         <Card title="Overview">
           <p>Hello World</p>

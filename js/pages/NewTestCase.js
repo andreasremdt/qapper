@@ -1,6 +1,7 @@
 import { h, Component, Fragment } from "preact";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import PageHeader from "../components/PageHeader";
 
 const INITIAL_STATE = {
   title: "",
@@ -28,9 +29,7 @@ class NewTestCase extends Component {
   render() {
     return (
       <Fragment>
-        <header className="mb-4">
-          <h1 className="text-xl">Create Testcase</h1>
-        </header>
+        <PageHeader>Create Testcase</PageHeader>
 
         <form onSubmit={this.handleSubmit} noValidate>
           <Input
