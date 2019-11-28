@@ -5,6 +5,7 @@ import ActionGroup from "../components/ActionGroup";
 import Alert from "../components/Alert";
 import http from "../http";
 import TestCaseContext from "../contexts/TestCaseContext";
+import withErrorDisplay from "../hocs/withErrorDisplay";
 
 class EditTestCase extends Component {
   state = { buttonDisabled: false };
@@ -15,11 +16,11 @@ class EditTestCase extends Component {
     http
       .get("action-group")
       .then(this.context.init)
-      .catch(() => {
-        // this.context.setError(
-        //   "Could not fetch your groups. Please try again later."
-        // );
-      });
+      .catch(() =>
+        this.props.displayError(
+          "Could not fetch your groups. Please try again later."
+        )
+      );
   }
 
   handleAddGroup = () => {
@@ -28,11 +29,11 @@ class EditTestCase extends Component {
     http
       .post("action-group", { name: "Empty Group" })
       .then(this.context.addGroup)
-      .catch(() => {
-        // this.context.setError(
-        //   "Could not add a new group. Please try again later."
-        // );
-      })
+      .catch(() =>
+        this.props.displayError(
+          "Could not add a new group. Please try again later."
+        )
+      )
       .finally(() => {
         this.setState({ buttonDisabled: false });
       });
@@ -73,4 +74,4 @@ class EditTestCase extends Component {
   }
 }
 
-export default EditTestCase;
+export default withErrorDisplay(EditTestCase);

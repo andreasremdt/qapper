@@ -7,30 +7,24 @@ import EditTestCase from "./pages/EditTestCase";
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import ErrorBoundary from "./components/ErrorBoundary";
-import ErrorMessage from "./components/ErrorMessage";
-import { ContextWrapper } from "./contexts/GlobalContext";
 import { TestCaseContextWrapper } from "./contexts/TestCaseContext";
 
 function App() {
   return (
     <ErrorBoundary>
-      <ContextWrapper>
-        <Header />
-        <Navigation />
+      <Header />
+      <Navigation />
 
-        <main className="container mx-auto mt-6">
-          <ErrorMessage />
-
-          <TestCaseContextWrapper>
-            <Router>
-              <Dashboard path="/" />
-              <NewTestCase path="/testcases/create" />
-              <ViewTestCase path="/testcases/:id" />
-              <EditTestCase path="/testcases/:id/edit" />
-            </Router>
-          </TestCaseContextWrapper>
-        </main>
-      </ContextWrapper>
+      <main className="container mx-auto mt-6">
+        <TestCaseContextWrapper>
+          <Router>
+            <Dashboard path="/" />
+            <NewTestCase path="/testcases/create" />
+            <ViewTestCase path="/testcases/:id" />
+            <EditTestCase path="/testcases/:id/edit" />
+          </Router>
+        </TestCaseContextWrapper>
+      </main>
     </ErrorBoundary>
   );
 }

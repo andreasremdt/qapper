@@ -3,6 +3,7 @@ import ActionItem from "../components/ActionItem";
 import Button from "../components/Button";
 import InlineEditable from "../components/InlineEditable";
 import TestCaseContext from "../contexts/TestCaseContext";
+import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
 class ActionGroup extends Component {
@@ -25,17 +26,18 @@ class ActionGroup extends Component {
   handleRemove = () => {
     this.setState({ buttonDeleteDisabled: true });
 
-    localStorage.removeItem(this.groupKey);
-
     http
       .delete(`action-group/${this.props.group.id}`)
-      .then(() => this.context.removeGroup(this.props.index))
+      .then(() => {
+        this.context.removeGroup(this.props.index);
+        localStorage.removeItem(this.groupKey);
+      })
       .catch(() => {
         this.setState({ buttonDeleteDisabled: false });
 
-        // this.context.setError(
-        //   "Could not delete this group. Please try again later."
-        // );
+        this.props.displayError(
+          "Could not delete this group. Please try again later."
+        );
       });
   };
 
@@ -46,11 +48,11 @@ class ActionGroup extends Component {
         actionGroupId: this.props.group.id
       })
       .then(item => this.context.addItem(this.props.index, item))
-      .catch(() => {
-        // this.context.setError(
-        //   "Could not add a new group. Please try again later."
-        // );
-      });
+      .catch(() =>
+        this.props.displayError(
+          "Could not add a new group. Please try again later."
+        )
+      );
   };
 
   handleEnterEdit = evt => {
@@ -68,11 +70,11 @@ class ActionGroup extends Component {
       http
         .patch(`action-group/${this.props.group.id}`, { name })
         .then(() => this.context.renameGroup(this.props.index, name))
-        .catch(() => {
-          // this.context.setError(
-          //   "Could not update this group's name. Please try again later."
-          // );
-        })
+        .catch(() =>
+          this.props.displayError(
+            "Could not update this group's name. Please try again later."
+          )
+        )
         .finally(() => {
           this.setState({ buttonEditDisabled: false });
         });
@@ -130,4 +132,4 @@ class ActionGroup extends Component {
   }
 }
 
-export default ActionGroup;
+export default withErrorDisplay(ActionGroup);

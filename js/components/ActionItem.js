@@ -1,6 +1,7 @@
 import { h, Component } from "preact";
 import Button from "../components/Button";
 import TestCaseContext from "../contexts/TestCaseContext";
+import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
 class ActionItem extends Component {
@@ -13,9 +14,9 @@ class ActionItem extends Component {
         this.context.removeItem(this.props.groupIndex, this.props.itemIndex)
       )
       .catch(() => {
-        // this.context.setError(
-        //   "Could not delete this item. Please try again later."
-        // );
+        this.props.displayError(
+          "Could not delete this item. Please try again later."
+        );
       });
   };
 
@@ -31,9 +32,9 @@ class ActionItem extends Component {
         );
       })
       .catch(() => {
-        // this.context.setError(
-        //   "Could not update this item's name. Please try again later."
-        // );
+        this.props.displayError(
+          "Could not update this item's name. Please try again later."
+        );
       });
   };
 
@@ -62,4 +63,4 @@ class ActionItem extends Component {
   }
 }
 
-export default ActionItem;
+export default withErrorDisplay(ActionItem);
