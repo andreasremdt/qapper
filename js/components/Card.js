@@ -1,10 +1,10 @@
 import { h } from "preact";
 
-function Card({ title, footer, children, dismissable, onDismiss }) {
+function Card({ title, footer, children, dismissable, onDismiss, noSpacing }) {
   return (
-    <article className="bg-white border border-solid border-gray-300 rounded-sm mb-4">
+    <article className="bg-white border border-solid border-gray-200 rounded-sm mb-4">
       {title && (
-        <header className="border-b border-solid border-gray-300 px-4 py-3">
+        <header className="border-b border-solid border-gray-200 px-4 py-3">
           {typeof title === "string" ? (
             <h3 className="text-lg">{title}</h3>
           ) : (
@@ -34,7 +34,7 @@ function Card({ title, footer, children, dismissable, onDismiss }) {
         </header>
       )}
 
-      <div className="px-4 py-3">{children}</div>
+      <div className={noSpacing ? "" : "px-4 py-3"}>{children}</div>
 
       {footer && <footer className="footer">{footer}</footer>}
     </article>

@@ -7,6 +7,7 @@ import EditTestCase from "./pages/EditTestCase";
 import TestCaseGeneral from "./pages/TestCaseGeneral";
 import TestCaseContent from "./pages/TestCaseContent";
 import TestCaseSettings from "./pages/TestCaseSettings";
+import Labels from "./pages/Labels";
 import Header from "./components/Header";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { TestCaseContextWrapper } from "./contexts/TestCaseContext";
@@ -20,6 +21,7 @@ function App() {
         <TestCaseContextWrapper>
           <Router>
             <Dashboard path="/" />
+            <Labels path="/labels" />
             <CreateTestCase path="/testcases/create" />
             <ViewTestCase path="/testcases/:id" />
             <EditTestCase path="/testcases/:id/edit/:tab?">

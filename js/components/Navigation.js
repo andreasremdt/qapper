@@ -10,6 +10,9 @@ function Navigation() {
       <NavLink href="/testcases/create" icon="new-folder">
         Create Testcase
       </NavLink>
+      <NavLink href="/labels" icon="tag">
+        Labels
+      </NavLink>
     </nav>
   );
 }

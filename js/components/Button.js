@@ -16,8 +16,8 @@ function getColors(variant, simple) {
       };
     case "warning":
       return {
-        default: simple ? "text-gray-600" : "text-orange-700 bg-orange-300",
-        hover: simple ? "hover:text-orange-700" : "hover:bg-orange-400"
+        default: simple ? "text-gray-600" : "text-yellow-900 bg-yellow-400",
+        hover: simple ? "hover:text-yellow-700" : "hover:bg-yellow-300"
       };
     case "success":
       return {
@@ -51,7 +51,7 @@ function Button({
       className={`${
         colors.default
       } font-semibold inline-flex items-center align-middle ${
-        simple ? "" : "text-sm px-3 py-2"
+        simple ? "" : "text-sm px-3 h-10"
       } rounded-sm ${
         disabled || loading ? "opacity-50 cursor-not-allowed" : colors.hover
       } ${className}`}

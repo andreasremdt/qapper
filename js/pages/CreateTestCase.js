@@ -46,27 +46,31 @@ class NewTestCase extends PureComponent {
         <PageHeader>Create Testcase</PageHeader>
 
         <form onSubmit={this.handleSubmit} noValidate>
-          <Input
-            label="Title"
-            name="name"
-            id="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            autoFocus
-            required
-            placeholder="Enter a descriptive title"
-          />
+          <div className="mb-3">
+            <Input
+              label="Title"
+              name="name"
+              id="name"
+              value={this.state.name}
+              onChange={this.handleChange}
+              autoFocus
+              required
+              placeholder="Enter a descriptive title"
+            />
+          </div>
 
-          <Input
-            label="Description"
-            name="description"
-            id="description"
-            value={this.state.description}
-            onChange={this.handleChange}
-            multiline
-            rows="4"
-            placeholder="Enter a description"
-          />
+          <div className="mb-3">
+            <Input
+              label="Description"
+              name="description"
+              id="description"
+              value={this.state.description}
+              onChange={this.handleChange}
+              multiline
+              rows="4"
+              placeholder="Enter a description"
+            />
+          </div>
 
           <Button type="submit" loading={this.state.buttonDisabled}>
             {this.state.buttonDisabled ? "Saving..." : "Continue"}
