@@ -1,4 +1,5 @@
-import { h, Component } from "preact";
+import { h } from "preact";
+import { PureComponent } from "preact/compat";
 import ActionItem from "../components/ActionItem";
 import Button from "../components/Button";
 import InlineEditable from "../components/InlineEditable";
@@ -6,10 +7,8 @@ import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
-class ActionGroup extends Component {
+class ActionGroup extends PureComponent {
   static contextType = TestCaseContext;
-
-  groupKey = `group.${this.props.group.id}.open`;
 
   state = {
     editing: false,
@@ -28,9 +27,9 @@ class ActionGroup extends Component {
     this.setState({ buttonDeleteLoading: true });
 
     http
-      .delete(`action-group/${this.props.group.id}`)
+      .delete(`action-group/${this.props.actionGroup.id}`)
       .then(() => {
-        this.context.removeGroup(this.props.index);
+        this.context.removeActionGroup(this.props.index);
         localStorage.removeItem(this.groupKey);
       })
       .catch(() => {
@@ -50,9 +49,9 @@ class ActionGroup extends Component {
     http
       .post("action-item", {
         name: "Untitled",
-        actionGroupId: this.props.group.id
+        actionGroupId: this.props.actionGroup.id
       })
-      .then(item => this.context.addItem(this.props.index, item))
+      .then(item => this.context.addActionItem(this.props.index, item))
       .catch(() =>
         this.props.displayError(
           "Could not add a new group. Please try again later."
@@ -68,12 +67,12 @@ class ActionGroup extends Component {
   };
 
   handleRename = name => {
-    if (name && name != this.props.group.name) {
+    if (name && name != this.props.actionGroup.name) {
       this.setState({ buttonEditLoading: true });
 
       http
-        .patch(`action-group/${this.props.group.id}`, { name })
-        .then(() => this.context.renameGroup(this.props.index, name))
+        .patch(`action-group/${this.props.actionGroup.id}`, { name })
+        .then(() => this.context.renameActionGroup(this.props.index, name))
         .catch(() =>
           this.props.displayError(
             "Could not update this group's name. Please try again later."
@@ -89,8 +88,12 @@ class ActionGroup extends Component {
     return localStorage.getItem(this.groupKey) == "true";
   }
 
+  get groupKey() {
+    return `group.${this.props.actionGroup.id}.open`;
+  }
+
   render() {
-    var { group } = this.props;
+    var { actionGroup } = this.props;
 
     return (
       <details className="mb-2" open={this.open}>
@@ -102,7 +105,7 @@ class ActionGroup extends Component {
             editing={this.state.editing}
             onEnter={this.handleRename}
           >
-            {group.name}
+            {actionGroup.name}
           </InlineEditable>
 
           <Button
@@ -132,13 +135,13 @@ class ActionGroup extends Component {
         </summary>
 
         <div className="border border-solid border-gray-100 p-2">
-          {group.actionItems.length ? (
-            group.actionItems.map((item, index) => (
+          {actionGroup.actionItems.length ? (
+            actionGroup.actionItems.map((actionItem, index) => (
               <ActionItem
-                item={item}
-                itemIndex={index}
-                groupIndex={this.props.index}
-                key={item.id}
+                actionItem={actionItem}
+                actionItemIndex={index}
+                actionGroupIndex={this.props.index}
+                key={actionItem.id}
               />
             ))
           ) : (

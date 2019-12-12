@@ -1,10 +1,11 @@
-import { h, Component } from "preact";
+import { h } from "preact";
+import { PureComponent } from "preact/compat";
 import Button from "../components/Button";
 import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
-class ActionItem extends Component {
+class ActionItem extends PureComponent {
   static contextType = TestCaseContext;
 
   state = {
@@ -15,9 +16,12 @@ class ActionItem extends Component {
     this.setState({ buttonDeleteLoading: true });
 
     http
-      .delete(`action-item/${this.props.item.id}`)
+      .delete(`action-item/${this.props.actionItem.id}`)
       .then(() =>
-        this.context.removeItem(this.props.groupIndex, this.props.itemIndex)
+        this.context.removeActionItem(
+          this.props.actionGroupIndex,
+          this.props.actionItemIndex
+        )
       )
       .catch(() => {
         this.props.displayError(
@@ -31,13 +35,13 @@ class ActionItem extends Component {
   handleEdit = evt => {
     var { name, value } = evt.target;
 
-    if (this.props.item[name] != value) {
+    if (this.props.actionItem[name] != value) {
       http
-        .patch(`action-item/${this.props.item.id}`, { [name]: value })
+        .patch(`action-item/${this.props.actionItem.id}`, { [name]: value })
         .then(item => {
-          this.context.renameItem(
-            this.props.groupIndex,
-            this.props.itemIndex,
+          this.context.renameActionItem(
+            this.props.actionGroupIndex,
+            this.props.actionItemIndex,
             item
           );
         })
@@ -54,14 +58,14 @@ class ActionItem extends Component {
       <div className="flex items-center mb-1">
         <input
           className="w-2/4 px-2 border border-solid border-gray-300 rounded-sm mr-2 text-gray-700 hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
-          value={this.props.item.name}
+          value={this.props.actionItem.name}
           name="name"
           placeholder="Enter an action name"
           onBlur={this.handleEdit}
         />
         <input
           className="w-2/4 px-2 border border-solid border-gray-300 rounded-sm mr-2 text-gray-700 hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
-          value={this.props.item.description}
+          value={this.props.actionItem.description}
           name="description"
           placeholder="Enter an action description"
           onBlur={this.handleEdit}

@@ -1,4 +1,5 @@
-import { h, Component, Fragment } from "preact";
+import { h, Fragment } from "preact";
+import { PureComponent } from "preact/compat";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
@@ -8,28 +9,37 @@ import http from "../http";
 import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 
-class EditTestCase extends Component {
-  state = { buttonDisabled: false };
+class EditTestCase extends PureComponent {
+  state = {
+    buttonDisabled: false,
+    loading: true,
+    name: "",
+    description: ""
+  };
 
   static contextType = TestCaseContext;
 
   componentDidMount() {
     http
-      .get("action-group")
+      .get(`test-case/${this.props.matches.id}`)
       .then(this.context.init)
       .catch(() =>
         this.props.displayError(
-          "Could not fetch your groups. Please try again later."
+          "Could not fetch your test case. Please try again later."
         )
-      );
+      )
+      .finally(() => this.setState({ loading: false }));
   }
 
   handleAddGroup = () => {
     this.setState({ buttonDisabled: true });
 
     http
-      .post("action-group", { name: "Empty Group" })
-      .then(this.context.addGroup)
+      .post("action-group", {
+        name: "Empty Group",
+        testCaseId: this.props.matches.id
+      })
+      .then(this.context.addActionGroup)
       .catch(() =>
         this.props.displayError(
           "Could not add a new group. Please try again later."
@@ -45,29 +55,39 @@ class EditTestCase extends Component {
       <Fragment>
         <PageHeader>Edit Testcase</PageHeader>
 
-        <Card title="Overview">
-          <p>Hello World</p>
-        </Card>
+        {this.state.loading ? (
+          <Alert type="info" loading>
+            Loading your test case...
+          </Alert>
+        ) : (
+          <Fragment>
+            <Card title="Overview">
+              <h1>{this.context.name}</h1>
+              <p>{this.context.description}</p>
+            </Card>
 
-        <Card title="Groups">
-          {this.context.groups.length ? (
-            <Fragment>
-              {this.context.groups.map((group, index) => (
-                <ActionGroup group={group} index={index} key={group.id} />
-              ))}
+            <Card title="Groups">
+              {this.context.actionGroups.length ? (
+                this.context.actionGroups.map((actionGroup, index) => (
+                  <ActionGroup
+                    actionGroup={actionGroup}
+                    index={index}
+                    key={actionGroup.id}
+                  />
+                ))
+              ) : (
+                <p>There are no groups, yet.</p>
+              )}
+
               <Button
                 onClick={this.handleAddGroup}
                 loading={this.state.buttonDisabled}
               >
                 {this.state.buttonDisabled ? "Adding group..." : "Add Group"}
               </Button>
-            </Fragment>
-          ) : (
-            <Alert type="info" loading>
-              Loading your data...
-            </Alert>
-          )}
-        </Card>
+            </Card>
+          </Fragment>
+        )}
       </Fragment>
     );
   }

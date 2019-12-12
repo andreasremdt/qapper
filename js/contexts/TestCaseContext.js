@@ -4,64 +4,64 @@ import update from "immutability-helper";
 var TestCaseContext = createContext();
 
 class TestCaseContextWrapper extends Component {
-  state = { groups: [] };
+  state = { name: "", description: "", actionGroups: [] };
 
-  init = groups => {
-    this.setState({ groups });
+  init = ({ name, description, actionGroups }) => {
+    this.setState({ name, description, actionGroups });
   };
 
-  addGroup = group => {
+  addActionGroup = group => {
     this.setState(prevState =>
       update(prevState, {
-        groups: { $push: [group] }
+        actionGroups: { $push: [group] }
       })
     );
   };
 
-  removeGroup = index => {
+  removeActionGroup = index => {
     this.setState(prevState =>
       update(prevState, {
-        groups: {
+        actionGroups: {
           $splice: [[index, 1]]
         }
       })
     );
   };
 
-  renameGroup = (index, name) => {
+  renameActionGroup = (index, name) => {
     this.setState(prevState =>
       update(prevState, {
-        groups: {
+        actionGroups: {
           [index]: { name: { $set: name } }
         }
       })
     );
   };
 
-  addItem = (index, item) => {
+  addActionItem = (index, item) => {
     this.setState(prevState =>
       update(prevState, {
-        groups: {
+        actionGroups: {
           [index]: { actionItems: { $push: [item] } }
         }
       })
     );
   };
 
-  removeItem = (groupIndex, itemIndex) => {
+  removeActionItem = (groupIndex, itemIndex) => {
     this.setState(prevState =>
       update(prevState, {
-        groups: {
+        actionGroups: {
           [groupIndex]: { actionItems: { $splice: [[itemIndex, 1]] } }
         }
       })
     );
   };
 
-  renameItem = (groupIndex, itemIndex, { name, description }) => {
+  renameActionItem = (groupIndex, itemIndex, { name, description }) => {
     this.setState(prevState =>
       update(prevState, {
-        groups: {
+        actionGroups: {
           [groupIndex]: {
             actionItems: { [itemIndex]: { $merge: { name, description } } }
           }
@@ -76,12 +76,12 @@ class TestCaseContextWrapper extends Component {
         value={{
           ...this.state,
           init: this.init,
-          addGroup: this.addGroup,
-          removeGroup: this.removeGroup,
-          renameGroup: this.renameGroup,
-          addItem: this.addItem,
-          removeItem: this.removeItem,
-          renameItem: this.renameItem
+          addActionGroup: this.addActionGroup,
+          removeActionGroup: this.removeActionGroup,
+          renameActionGroup: this.renameActionGroup,
+          addActionItem: this.addActionItem,
+          removeActionItem: this.removeActionItem,
+          renameActionItem: this.renameActionItem
         }}
       >
         {this.props.children}
