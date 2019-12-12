@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { Link } from "preact-router/match";
 import Icon from "./Icon";
 
 function getColors(variant, simple) {
@@ -40,13 +41,13 @@ function Button({
   loading,
   simple,
   className,
-  type = "button",
   ...props
 }) {
   var colors = getColors(variant, simple);
+  var ButtonTag = props.href ? Link : "button";
 
   return (
-    <button
+    <ButtonTag
       className={`${
         colors.default
       } font-semibold inline-flex items-center align-middle ${
@@ -54,7 +55,6 @@ function Button({
       } rounded-sm ${
         disabled || loading ? "opacity-50 cursor-not-allowed" : colors.hover
       } ${className}`}
-      type={type}
       onClick={onClick}
       disabled={disabled || loading}
       {...props}
@@ -70,7 +70,7 @@ function Button({
         />
       )}
       {children}
-    </button>
+    </ButtonTag>
   );
 }
 
