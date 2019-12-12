@@ -1,16 +1,18 @@
-import { h, Component, Fragment } from "preact";
+import { h, Fragment } from "preact";
+import { PureComponent } from "preact/compat";
+import { route } from "preact-router";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import PageHeader from "../components/PageHeader";
+import withErrorDisplay from "../hocs/withErrorDisplay";
+import http from "../http";
 
-const INITIAL_STATE = {
-  title: "",
-  description: "",
-  labels: ""
-};
-
-class NewTestCase extends Component {
-  state = INITIAL_STATE;
+class NewTestCase extends PureComponent {
+  state = {
+    name: "",
+    description: "",
+    buttonDisabled: false
+  };
 
   handleChange = evt => {
     var input = evt.target;
@@ -23,7 +25,19 @@ class NewTestCase extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
 
-    this.setState(INITIAL_STATE);
+    this.setState({ buttonDisabled: true });
+
+    http
+      .post("test-case", { ...this.state })
+      .then(({ id }) => route(`/testcases/${id}/edit`))
+      .catch(() =>
+        this.props.displayError(
+          "Could not create test case. Please try again later."
+        )
+      )
+      .finally(() => {
+        this.setState({ buttonDisabled: false });
+      });
   };
 
   render() {
@@ -34,14 +48,15 @@ class NewTestCase extends Component {
         <form onSubmit={this.handleSubmit} noValidate>
           <Input
             label="Title"
-            name="title"
-            id="title"
-            value={this.state.title}
+            name="name"
+            id="name"
+            value={this.state.name}
             onChange={this.handleChange}
             autoFocus
             required
             placeholder="Enter a descriptive title"
           />
+
           <Input
             label="Description"
             name="description"
@@ -52,20 +67,14 @@ class NewTestCase extends Component {
             rows="4"
             placeholder="Enter a description"
           />
-          <Input
-            label="Which browsers do you want to test?"
-            name="browsers"
-            id="browsers"
-            value={this.state.browsers}
-            onChange={this.handleChange}
-            required
-            placeholder="Write a comma separated list, e.g. Firefox, Chrome, Edge"
-          />
-          <Button type="submit">Create report</Button>
+
+          <Button type="submit" loading={this.state.buttonDisabled}>
+            {this.state.buttonDisabled ? "Saving..." : "Continue"}
+          </Button>
         </form>
       </Fragment>
     );
   }
 }
 
-export default NewTestCase;
+export default withErrorDisplay(NewTestCase);
