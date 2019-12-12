@@ -70,11 +70,7 @@ class Labels extends PureComponent {
     return (
       <Fragment>
         <PageHeader
-          action={
-            <Button variant="warning" onClick={this.handleToggle}>
-              New label
-            </Button>
-          }
+          action={<Button onClick={this.handleToggle}>New label</Button>}
         >
           Labels
         </PageHeader>

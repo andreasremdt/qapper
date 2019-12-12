@@ -2,6 +2,7 @@ import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
 import Folder from "../components/Folder";
 import Alert from "../components/Alert";
+import Button from "../components/Button";
 import PageHeader from "../components/PageHeader";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
@@ -26,7 +27,11 @@ class Dashboard extends PureComponent {
   render() {
     return (
       <Fragment>
-        <PageHeader>Dashboard</PageHeader>
+        <PageHeader
+          action={<Button href="/testcases/create">New testcase</Button>}
+        >
+          Dashboard
+        </PageHeader>
 
         {this.state.loading ? (
           <Alert type="info" loading>

@@ -14,11 +14,6 @@ function getColors(variant, simple) {
         default: simple ? "text-gray-600" : "text-white bg-red-500",
         hover: simple ? "hover:text-red-400" : "hover:bg-red-600"
       };
-    case "warning":
-      return {
-        default: simple ? "text-gray-600" : "text-yellow-900 bg-yellow-400",
-        hover: simple ? "hover:text-yellow-700" : "hover:bg-yellow-300"
-      };
     case "success":
       return {
         default: simple ? "text-gray-600" : "text-white bg-green-400",
@@ -26,8 +21,8 @@ function getColors(variant, simple) {
       };
     default:
       return {
-        default: simple ? "text-gray-600" : "text-white bg-blue-700",
-        hover: simple ? "hover:text-blue-500" : "hover:bg-blue-600"
+        default: simple ? "text-gray-600" : "text-yellow-900 bg-yellow-400",
+        hover: simple ? "hover:text-yellow-700" : "hover:bg-yellow-300"
       };
   }
 }

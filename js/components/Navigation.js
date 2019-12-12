@@ -8,7 +8,7 @@ function Navigation() {
         Dashboard
       </NavLink>
       <NavLink href="/testcases/create" icon="new-folder">
-        Create Testcase
+        New testcase
       </NavLink>
       <NavLink href="/labels" icon="tag">
         Labels
