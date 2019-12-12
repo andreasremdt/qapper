@@ -6,8 +6,8 @@ import Icon from "./Icon";
 
 function Header() {
   return (
-    <header className="bg-header">
-      <div className="container mx-auto py-3 flex items-center shadow">
+    <header className="bg-header shadow">
+      <div className="container mx-auto py-3 flex items-center">
         <Icon
           icon="logo"
           width="20"

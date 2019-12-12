@@ -25,7 +25,7 @@ function getColors(variant, simple) {
       };
     default:
       return {
-        default: simple ? "text-gray-600" : "text-white bg-blue-500",
+        default: simple ? "text-gray-600" : "text-white bg-blue-700",
         hover: simple ? "hover:text-blue-500" : "hover:bg-blue-600"
       };
   }
