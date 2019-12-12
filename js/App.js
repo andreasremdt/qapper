@@ -4,6 +4,9 @@ import Dashboard from "./pages/Dashboard";
 import CreateTestCase from "./pages/CreateTestCase";
 import ViewTestCase from "./pages/ViewTestCase";
 import EditTestCase from "./pages/EditTestCase";
+import TestCaseGeneral from "./pages/TestCaseGeneral";
+import TestCaseContent from "./pages/TestCaseContent";
+import TestCaseSettings from "./pages/TestCaseSettings";
 import Header from "./components/Header";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { TestCaseContextWrapper } from "./contexts/TestCaseContext";
@@ -19,7 +22,13 @@ function App() {
             <Dashboard path="/" />
             <CreateTestCase path="/testcases/create" />
             <ViewTestCase path="/testcases/:id" />
-            <EditTestCase path="/testcases/:id/edit" />
+            <EditTestCase path="/testcases/:id/edit/:tab?">
+              <Router>
+                <TestCaseGeneral path="/testcases/:id/edit" />
+                <TestCaseContent path="/testcases/:id/edit/content" />
+                <TestCaseSettings path="/testcases/:id/edit/settings" />
+              </Router>
+            </EditTestCase>
           </Router>
         </TestCaseContextWrapper>
       </main>
