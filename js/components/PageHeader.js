@@ -8,7 +8,7 @@ function PageHeader({ children }) {
 
   return (
     <header className="mb-4">
-      <h1 className="text-xl">{children}</h1>
+      <h1 className="text-2xl">{children}</h1>
     </header>
   );
 }

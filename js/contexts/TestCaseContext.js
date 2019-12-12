@@ -4,10 +4,10 @@ import update from "immutability-helper";
 var TestCaseContext = createContext();
 
 class TestCaseContextWrapper extends Component {
-  state = { name: "", description: "", actionGroups: [] };
+  state = { actionGroups: [] };
 
-  init = ({ name, description, actionGroups }) => {
-    this.setState({ name, description, actionGroups });
+  init = actionGroups => {
+    this.setState({ actionGroups });
   };
 
   addActionGroup = group => {
