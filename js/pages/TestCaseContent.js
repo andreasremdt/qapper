@@ -2,6 +2,7 @@ import { h } from "preact";
 import { PureComponent } from "preact/compat";
 import TestCaseContext from "../contexts/TestCaseContext";
 import Card from "../components/Card";
+import Alert from "../components/Alert";
 import Button from "../components/Button";
 import ActionGroup from "../components/ActionGroup";
 import withErrorDisplay from "../hocs/withErrorDisplay";
@@ -49,6 +50,14 @@ class TestCaseContent extends PureComponent {
   };
 
   render() {
+    if (this.state.loading) {
+      return (
+        <Alert type="info" loading>
+          Loading your test case data...
+        </Alert>
+      );
+    }
+
     return (
       <Card title="Groups">
         {this.context.actionGroups.length ? (
