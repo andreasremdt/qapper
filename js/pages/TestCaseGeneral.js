@@ -1,7 +1,7 @@
 import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
 import Alert from "../components/Alert";
-import Badge from "../components/Badge";
+import LabelSelector from "../components/LabelSelector";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
@@ -9,14 +9,15 @@ class TestCaseGeneral extends PureComponent {
   state = {
     loading: true,
     name: "",
-    description: ""
+    description: "",
+    labels: []
   };
 
   componentDidMount() {
     http
       .get(`test-case/${this.props.matches.id}`)
-      .then(({ name, description }) => {
-        this.setState({ name, description });
+      .then(({ name, description, labels }) => {
+        this.setState({ name, description, labels });
       })
       .catch(() =>
         this.props.displayError(
@@ -47,6 +48,17 @@ class TestCaseGeneral extends PureComponent {
     }
   };
 
+  handleAddLabel = labels => {
+    http
+      .patch(`test-case/${this.props.matches.id}`, { labels })
+      .then(() => this.setState({ labels }))
+      .catch(() => {
+        this.props.displayError(
+          "Could not update the labels. Please try again later."
+        );
+      });
+  };
+
   render() {
     if (this.state.loading) {
       return (
@@ -69,7 +81,7 @@ class TestCaseGeneral extends PureComponent {
             type="text"
             id="name"
             onBlur={this.handleBlur}
-            className="border border-solid border-gray-300 px-3 flex-1 text-gray-700 py-2 rounded-sm hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
+            className="border border-solid border-gray-200 px-3 flex-1 text-gray-700 py-2 rounded-sm hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
             value={this.state.name}
             placeholder="The name of this testcase"
             required
@@ -84,7 +96,7 @@ class TestCaseGeneral extends PureComponent {
             Description:
           </label>
           <textarea
-            className="border border-solid border-gray-300 px-3 flex-1 text-gray-700 py-2 rounded-sm hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
+            className="border border-solid border-gray-200 px-3 flex-1 text-gray-700 py-2 rounded-sm hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
             id="description"
             onBlur={this.handleBlur}
             value={this.state.description}
@@ -99,15 +111,11 @@ class TestCaseGeneral extends PureComponent {
             Labels:
           </label>
           <div className="flex-1">
-            <input
-              type="text"
-              className="border border-solid border-gray-300 px-3 w-full mb-2 text-gray-700 py-2 rounded-sm hover:border-gray-400 focus:border-blue-500 focus:shadow-outline"
-              placeholder="To add a label, just search for it and press ,"
-              required
+            <LabelSelector
+              labels={this.state.labels}
+              onSubmit={this.handleAddLabel}
+              placeholder="Type the label name and press `Enter`"
             />
-            <Badge>Chrome</Badge>
-            <Badge>Firefox</Badge>
-            <Badge>Enterprise</Badge>
           </div>
         </div>
       </Fragment>
