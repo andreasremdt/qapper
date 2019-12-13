@@ -1,0 +1,25 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.25rem;
+
+  text-transform: lowercase;
+  font-weight: 600;
+  font-size: 0.875rem;
+
+  color: white;
+  background-color: var(--gray-500);
+
+  border-radius: 0.25em;
+
+  white-space: nowrap;
+
+  > .action {
+    margin-left: 0.5rem;
+
+    cursor: pointer;
+
+    color: inherit;
+  }
+}

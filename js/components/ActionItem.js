@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { PureComponent } from "preact/compat";
-import Button from "../components/Button";
+import Button from "../primitives/Button";
 import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";

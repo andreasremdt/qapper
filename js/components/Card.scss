@@ -1,0 +1,35 @@
+.content-card {
+  margin-bottom: 1.5rem;
+
+  background-color: white;
+
+  border-radius: 0.25em;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.075);
+
+  transition: box-shadow 0.1s linear;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 16px 15px -10px rgba(0, 0, 0, 0.075);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .body {
+    padding: 1rem;
+  }
+
+  .footer {
+    padding: 1rem;
+
+    border-top: 1px solid var(--gray-100);
+  }
+}

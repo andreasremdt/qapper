@@ -1,0 +1,16 @@
+.navigation-link {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+
+  font-weight: 600;
+
+  color: var(--blue-200);
+
+  transition: color 0.1s linear;
+
+  &:hover,
+  &.is-active {
+    color: var(--yellow-300);
+  }
+}

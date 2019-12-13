@@ -1,0 +1,13 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+
+  .title {
+    margin: unset;
+
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+}

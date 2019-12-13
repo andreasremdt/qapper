@@ -1,23 +1,21 @@
 import { h } from "preact";
 import Navigation from "./Navigation";
 import Search from "./Search";
-import UserMenu from "./UserMenu";
+import NavLink from "../primitives/NavLink";
 import Icon from "./Icon";
+import "./Header.scss";
 
 function Header() {
   return (
-    <header className="bg-header shadow">
-      <div className="container mx-auto py-3 flex items-center">
-        <Icon
-          icon="logo"
-          width="20"
-          height="20"
-          className="bg-white text-blue-800 p-1 content-box rounded-sm mr-8"
-        />
+    <header className="main-header">
+      <div className="container">
+        <Icon icon="logo" width="20" height="20" className="icon" />
 
         <Navigation />
         <Search />
-        <UserMenu />
+        <NavLink href="/logout" icon="logout">
+          Logout
+        </NavLink>
       </div>
     </header>
   );

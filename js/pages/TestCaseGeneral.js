@@ -1,6 +1,6 @@
 import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
-import Alert from "../components/Alert";
+import Alert from "../primitives/Alert";
 import LabelSelector from "../components/LabelSelector";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";

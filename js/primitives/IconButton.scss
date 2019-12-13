@@ -1,0 +1,35 @@
+.icon-button {
+  display: inline-block;
+  padding: 0 0.3rem;
+
+  cursor: pointer;
+  transition: color 0.1s linear;
+
+  color: var(--gray-400);
+
+  &[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-primary {
+    &:not([disabled]):hover,
+    &:not([disabled]):focus {
+      color: var(--blue-500);
+    }
+  }
+
+  &.is-secondary {
+    &:not([disabled]):hover,
+    &:not([disabled]):focus {
+      color: var(--gray-700);
+    }
+  }
+
+  &.is-danger {
+    &:not([disabled]):hover,
+    &:not([disabled]):focus {
+      color: var(--red-400);
+    }
+  }
+}

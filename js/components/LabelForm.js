@@ -1,8 +1,10 @@
-import { h, Fragment } from "preact";
+import { h } from "preact";
 import { PureComponent } from "preact/compat";
-import Input from "../components/Input";
-import Badge from "../components/Badge";
-import Button from "../components/Button";
+import Input from "../primitives/Input";
+import Badge from "../primitives/Badge";
+import Button from "../primitives/Button";
+import FormGroup from "../primitives/FormGroup";
+import "./LabelForm.scss";
 
 class LabelForm extends PureComponent {
   state = {
@@ -52,13 +54,13 @@ class LabelForm extends PureComponent {
 
   render() {
     return (
-      <Fragment>
-        <Badge color={this.state.color} className="mb-6">
+      <div className="label-form">
+        <Badge color={this.state.color}>
           {this.state.name || "Label preview"}
         </Badge>
 
-        <form className="flex items-end" onSubmit={this.handleSubmit}>
-          <div className="mr-3 w-64">
+        <form className="form" onSubmit={this.handleSubmit}>
+          <FormGroup direction="right">
             <Input
               label="Label name"
               type="text"
@@ -67,9 +69,9 @@ class LabelForm extends PureComponent {
               onChange={this.handleChange}
               value={this.state.name}
             />
-          </div>
+          </FormGroup>
 
-          <div className="mr-3 flex-1">
+          <FormGroup direction="right" className="description">
             <Input
               label="Label description"
               type="text"
@@ -78,17 +80,18 @@ class LabelForm extends PureComponent {
               onChange={this.handleChange}
               value={this.state.description}
             />
-          </div>
+          </FormGroup>
 
-          <Button
-            icon="refresh"
-            variant="secondary"
-            type="button"
-            onClick={this.handleColorGeneration}
-            className="mr-2"
-          />
+          <FormGroup direction="right">
+            <Button
+              icon="refresh"
+              variant="secondary"
+              type="button"
+              onClick={this.handleColorGeneration}
+            />
+          </FormGroup>
 
-          <div className="mr-8 w-32">
+          <FormGroup direction="right">
             <Input
               label="Label color"
               type="text"
@@ -97,19 +100,19 @@ class LabelForm extends PureComponent {
               onChange={this.handleChange}
               value={this.state.color}
             />
-          </div>
+          </FormGroup>
+
+          <FormGroup direction="right">
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={this.props.onCancel}
+            >
+              Cancel
+            </Button>
+          </FormGroup>
 
           <Button
-            variant="secondary"
-            type="button"
-            onClick={this.props.onCancel}
-            className="mr-2"
-          >
-            Cancel
-          </Button>
-
-          <Button
-            variant="warning"
             type="submit"
             disabled={!this.isLabelValid}
             loading={this.state.buttonDisabled}
@@ -117,7 +120,7 @@ class LabelForm extends PureComponent {
             {this.state.buttonDisabled ? "Loading..." : this.buttonText}
           </Button>
         </form>
-      </Fragment>
+      </div>
     );
   }
 }

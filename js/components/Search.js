@@ -1,13 +1,10 @@
 import { h } from "preact";
+import "./Search.scss";
 
 function Search() {
   return (
-    <form className="ml-auto">
-      <input
-        type="search"
-        placeholder="Search..."
-        className="rounded-full px-4 py-1 text-gray-600"
-      />
+    <form className="search-form">
+      <input type="search" placeholder="Search..." className="input" />
     </form>
   );
 }

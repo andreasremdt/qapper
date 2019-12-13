@@ -1,9 +1,9 @@
 import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
 import Folder from "../components/Folder";
-import Alert from "../components/Alert";
-import Button from "../components/Button";
-import PageHeader from "../components/PageHeader";
+import Alert from "../primitives/Alert";
+import Button from "../primitives/Button";
+import PageHeader from "../primitives/PageHeader";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
@@ -32,11 +32,8 @@ class Dashboard extends PureComponent {
         >
           Dashboard
         </PageHeader>
-
         {this.state.loading ? (
-          <Alert type="info" loading>
-            Loading your test cases...
-          </Alert>
+          <Alert isLoading>Loading your test cases...</Alert>
         ) : this.state.testCases.length == 0 ? (
           <p>There are no testcases, yet.</p>
         ) : (

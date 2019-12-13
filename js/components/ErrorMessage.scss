@@ -1,0 +1,33 @@
+.error-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  max-width: 24rem;
+
+  border-radius: 0.25em;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+
+  line-height: 1.25;
+
+  color: white;
+  background-color: var(--red-500);
+
+  .close {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+
+    cursor: pointer;
+
+    color: var(--red-800);
+  }
+
+  .title {
+    display: block;
+  }
+
+  .error {
+    margin-bottom: unset;
+  }
+}

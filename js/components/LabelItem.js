@@ -1,10 +1,11 @@
-import { h } from "preact";
+import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
-import Badge from "../components/Badge";
-import Button from "../components/Button";
+import Badge from "../primitives/Badge";
+import IconButton from "../primitives/IconButton";
 import LabelForm from "../components/LabelForm";
 import http from "../http";
 import withErrorDisplay from "../hocs/withErrorDisplay";
+import "./LabelItem.scss";
 
 class LabelItem extends PureComponent {
   state = { buttonDeleteLoading: false, isLabelFormShown: false };
@@ -41,7 +42,7 @@ class LabelItem extends PureComponent {
 
   render() {
     return (
-      <article className="p-3 border-solid border-b border-gray-200 hover:bg-gray-100">
+      <article className="label-item">
         {this.state.isLabelFormShown ? (
           <LabelForm
             onSubmit={this.handleUpdate}
@@ -49,30 +50,31 @@ class LabelItem extends PureComponent {
             label={this.props.label}
           />
         ) : (
-          <div className="flex justify-between items-center">
-            <div className="w-64">
+          <Fragment>
+            <div className="label">
               <Badge color={this.props.label.color}>
                 {this.props.label.name}
               </Badge>
             </div>
 
-            <p>{this.props.label.description}</p>
-            <Button
+            {this.props.label.description && (
+              <p className="description">{this.props.label.description}</p>
+            )}
+
+            <IconButton
               icon="edit"
-              simple
               title="Edit this label"
-              className="ml-auto mr-3"
               onClick={this.handleToggle}
             />
-            <Button
+
+            <IconButton
               variant="danger"
               icon="trash"
-              simple
               title="Delete this label"
               onClick={this.handleDelete}
               loading={this.state.buttonDeleteLoading}
             />
-          </div>
+          </Fragment>
         )}
       </article>
     );

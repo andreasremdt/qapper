@@ -1,0 +1,16 @@
+.label-form {
+  flex: 1;
+
+  .badge {
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .description {
+    flex: 1;
+  }
+}

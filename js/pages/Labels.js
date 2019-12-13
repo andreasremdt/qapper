@@ -1,10 +1,10 @@
 import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
 import update from "immutability-helper";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../primitives/PageHeader";
 import Card from "../components/Card";
-import Alert from "../components/Alert";
-import Button from "../components/Button";
+import Alert from "../primitives/Alert";
+import Button from "../primitives/Button";
 import http from "../http";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import LabelItem from "../components/LabelItem";
@@ -84,13 +84,11 @@ class Labels extends PureComponent {
           </Card>
         )}
 
-        <Card noSpacing>
-          {this.state.isLoading ? (
-            <Alert type="info" loading>
-              Loading the labels...
-            </Alert>
-          ) : (
-            this.state.labels.map((label, index) => (
+        {this.state.isLoading ? (
+          <Alert isLoading>Loading the labels...</Alert>
+        ) : (
+          <Card noSpacing>
+            {this.state.labels.map((label, index) => (
               <LabelItem
                 label={label}
                 labelIndex={index}
@@ -98,9 +96,9 @@ class Labels extends PureComponent {
                 onDelete={this.handleDeleteLabel}
                 onUpdate={this.handleUpdateLabel}
               />
-            ))
-          )}
-        </Card>
+            ))}
+          </Card>
+        )}
       </Fragment>
     );
   }

@@ -2,7 +2,7 @@ import { h } from "preact";
 import Router from "preact-router";
 import Dashboard from "./pages/Dashboard";
 import CreateTestCase from "./pages/CreateTestCase";
-import ViewTestCase from "./pages/ViewTestCase";
+// import ViewTestCase from "./pages/ViewTestCase";
 import EditTestCase from "./pages/EditTestCase";
 import TestCaseGeneral from "./pages/TestCaseGeneral";
 import TestCaseContent from "./pages/TestCaseContent";
@@ -17,20 +17,20 @@ function App() {
     <ErrorBoundary>
       <Header />
 
-      <main className="container mx-auto mt-6">
+      <main className="container">
         <TestCaseContextWrapper>
           <Router>
             <Dashboard path="/" />
-            <Labels path="/labels" />
             <CreateTestCase path="/testcases/create" />
-            <ViewTestCase path="/testcases/:id" />
-            <EditTestCase path="/testcases/:id/edit/:tab?">
+            <Labels path="/labels" />
+            <EditTestCase path="/testcases/:id/edit/:*?">
               <Router>
                 <TestCaseGeneral path="/testcases/:id/edit" />
                 <TestCaseContent path="/testcases/:id/edit/content" />
                 <TestCaseSettings path="/testcases/:id/edit/settings" />
               </Router>
             </EditTestCase>
+            {/* <ViewTestCase path="/testcases/:id" />*/}
           </Router>
         </TestCaseContextWrapper>
       </main>

@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { PureComponent } from "preact/compat";
 import ActionItem from "../components/ActionItem";
-import Button from "../components/Button";
+import Button from "../primitives/Button";
 import InlineEditable from "../components/InlineEditable";
 import TestCaseContext from "../contexts/TestCaseContext";
 import withErrorDisplay from "../hocs/withErrorDisplay";

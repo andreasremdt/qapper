@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  background-color: transparent;
+  font: inherit;
+  border: unset;
+  padding: unset;
+}
+
+img,
+svg {
+  vertical-align: middle;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  border: unset;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}

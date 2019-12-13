@@ -1,0 +1,17 @@
+.alert {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+
+  border-radius: 0.25em;
+
+  > .icon {
+    margin-right: 0.5rem;
+  }
+
+  &.is-primary {
+    background-color: var(--blue-100);
+    border: 1px solid var(--blue-200);
+    color: var(--blue-600);
+  }
+}

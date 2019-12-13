@@ -1,9 +1,10 @@
 import { h } from "preact";
-import NavLink from "./NavLink";
+import NavLink from "../primitives/NavLink";
+import "./Navigation.scss";
 
 function Navigation() {
   return (
-    <nav className="flex">
+    <nav className="main-navigation">
       <NavLink href="/" icon="home">
         Dashboard
       </NavLink>

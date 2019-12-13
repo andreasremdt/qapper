@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { useEffect } from "preact/hooks";
+import "./PageHeader.scss";
 
 function PageHeader({ children, action }) {
   useEffect(() => {
@@ -7,8 +8,8 @@ function PageHeader({ children, action }) {
   }, []);
 
   return (
-    <header className="mb-4 flex items-center justify-between">
-      <h1 className="text-2xl">{children}</h1>
+    <header className="page-header">
+      <h1 className="title">{children}</h1>
 
       {action}
     </header>

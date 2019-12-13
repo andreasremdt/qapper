@@ -2,7 +2,7 @@ import { h } from "preact";
 import { PureComponent } from "preact/compat";
 import { route } from "preact-router";
 import Card from "../components/Card";
-import Button from "../components/Button";
+import Button from "../primitives/Button";
 import http from "../http";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 

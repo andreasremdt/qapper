@@ -2,10 +2,12 @@ import { h } from "preact";
 import { PureComponent } from "preact/compat";
 import update from "immutability-helper";
 import { Link } from "preact-router/match";
-import Badge from "./Badge";
+import Badge from "../primitives/Badge";
+import Label from "../primitives/Label";
 import Icon from "./Icon";
 import http from "../http";
 import withErrorDisplay from "../hocs/withErrorDisplay";
+import "./LabelSelector.scss";
 
 class LabelSelector extends PureComponent {
   state = {
@@ -90,18 +92,10 @@ class LabelSelector extends PureComponent {
 
   render() {
     return (
-      <div className="relative">
-        {this.props.label && (
-          <label className="font-semibold block text-sm mb-1" htmlFor="label">
-            {this.props.label}
-          </label>
-        )}
+      <div className="label-selector">
+        {this.props.label && <Label htmlFor="label">{this.props.label}</Label>}
 
-        <div
-          className={`border border-solid border-gray-200 px-2 flex items-center h-10 bg-white rounded-sm hover:border-gray-400 ${
-            this.state.isDropdownShown ? "border-blue-500 shadow-outline" : ""
-          }`}
-        >
+        <div className="form-control">
           {this.props.labels.map((label, labelIndex) => (
             <Badge color={label.color} onDelete={this.handleDelete(labelIndex)}>
               {label.name}
@@ -115,33 +109,28 @@ class LabelSelector extends PureComponent {
             onKeyDown={this.handleKeyDown}
             placeholder={this.props.placeholder}
             name="label"
-            className="text-gray-700 ml-2 w-full"
+            className="input"
           />
         </div>
 
         {this.state.isDropdownShown && (
-          <div className="bg-white absolute w-2/4 -mt-px border border-solid border-gray-200 rounded-br-sm rounded-bl-sm">
-            <ul>
+          <div className="label-dropdown">
+            <ul className="list">
               {this.filteredLabels.length == 0 && (
-                <li className="p-2 border-b border-solid border-gray-100 text-gray-400">
-                  Nothing found :(
-                </li>
+                <li className="notfound">Nothing found :(</li>
               )}
 
               {this.filteredLabels.map(label => (
                 <li
                   key={label.id}
                   onMouseDown={this.handleClick(label)}
-                  className="py-1 px-2 cursor-pointer hover:bg-gray-100 border-b border-solid border-gray-100"
+                  className="item"
                 >
                   <Badge color={label.color}>{label.name}</Badge>
                 </li>
               ))}
             </ul>
-            <Link
-              href="/labels"
-              className="p-2 block hover:bg-gray-100 flex items-center"
-            >
+            <Link href="/labels" className="manage">
               <Icon icon="tag" width="16" height="16" className="mr-1" />
               Manage labels
             </Link>

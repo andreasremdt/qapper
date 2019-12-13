@@ -1,9 +1,10 @@
 import { h, Fragment } from "preact";
 import { PureComponent } from "preact/compat";
 import { route } from "preact-router";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import PageHeader from "../components/PageHeader";
+import Input from "../primitives/Input";
+import FormGroup from "../primitives/FormGroup";
+import Button from "../primitives/Button";
+import PageHeader from "../primitives/PageHeader";
 import withErrorDisplay from "../hocs/withErrorDisplay";
 import http from "../http";
 
@@ -46,7 +47,7 @@ class NewTestCase extends PureComponent {
         <PageHeader>Create Testcase</PageHeader>
 
         <form onSubmit={this.handleSubmit} noValidate>
-          <div className="mb-3">
+          <FormGroup>
             <Input
               label="Title"
               name="name"
@@ -57,9 +58,9 @@ class NewTestCase extends PureComponent {
               required
               placeholder="Enter a descriptive title"
             />
-          </div>
+          </FormGroup>
 
-          <div className="mb-3">
+          <FormGroup>
             <Input
               label="Description"
               name="description"
@@ -70,9 +71,13 @@ class NewTestCase extends PureComponent {
               rows="4"
               placeholder="Enter a description"
             />
-          </div>
+          </FormGroup>
 
-          <Button type="submit" loading={this.state.buttonDisabled}>
+          <Button
+            type="submit"
+            icon="trash"
+            isLoading={this.state.buttonDisabled}
+          >
             {this.state.buttonDisabled ? "Saving..." : "Continue"}
           </Button>
         </form>

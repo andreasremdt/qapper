@@ -1,17 +1,15 @@
 import { h } from "preact";
+import Icon from "./Icon";
+import "./ErrorMessage.scss";
 
 function ErrorMessage({ error, onClose }) {
   return (
-    <div className="bg-red-500 text-white rounded-sm py-2 px-4 fixed top-0 right-0 m-4 max-w-sm leading-tight pr-10">
-      <button
-        type="button"
-        onClick={onClose}
-        className="text-red-800 absolute top-0 right-0 mt-2 mr-2"
-      >
+    <div className="error-message">
+      <button type="button" onClick={onClose} className="close">
         <Icon icon="cross" width="20" height="20" />
       </button>
-      <strong className="mb-2 block">Something went wrong :(</strong>
-      <p>{error}</p>
+      <strong className="title">Something went wrong :(</strong>
+      <p className="error">{error} lorem ipsum dolor set amet</p>
     </div>
   );
 }

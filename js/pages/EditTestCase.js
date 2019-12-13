@@ -1,5 +1,5 @@
 import { h, Fragment } from "preact";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../primitives/PageHeader";
 import { Link } from "preact-router/match";
 
 function EditTestCase({ children, matches }) {
