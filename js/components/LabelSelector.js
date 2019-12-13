@@ -15,14 +15,20 @@ class LabelSelector extends PureComponent {
   };
 
   componentDidMount() {
-    http
-      .get("label")
-      .then(labels => this.setState({ labels }))
-      .catch(() => {
-        this.props.displayError(
-          "Could not fetch the labels. Please try again later."
-        );
+    if (this.props.availableLabels) {
+      this.setState({
+        labels: this.props.availableLabels
       });
+    } else {
+      http
+        .get("label")
+        .then(labels => this.setState({ labels }))
+        .catch(() => {
+          this.props.displayError(
+            "Could not fetch the labels. Please try again later."
+          );
+        });
+    }
   }
 
   handleChange = evt => {
@@ -85,6 +91,12 @@ class LabelSelector extends PureComponent {
   render() {
     return (
       <div className="relative">
+        {this.props.label && (
+          <label className="font-semibold block text-sm mb-1" htmlFor="label">
+            {this.props.label}
+          </label>
+        )}
+
         <div
           className={`border border-solid border-gray-200 px-2 flex items-center h-10 bg-white rounded-sm hover:border-gray-400 ${
             this.state.isDropdownShown ? "border-blue-500 shadow-outline" : ""
@@ -102,6 +114,7 @@ class LabelSelector extends PureComponent {
             onBlur={this.handleHideDropdown}
             onKeyDown={this.handleKeyDown}
             placeholder={this.props.placeholder}
+            name="label"
             className="text-gray-700 ml-2 w-full"
           />
         </div>

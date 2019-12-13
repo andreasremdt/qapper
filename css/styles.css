@@ -32,6 +32,10 @@ body {
   @apply text-gray-800 antialiased;
 }
 
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
 .bg-header {
   background: linear-gradient(to right, #186faf, #0a558c);
 }

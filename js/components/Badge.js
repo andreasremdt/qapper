@@ -15,7 +15,7 @@ function Badge({ children, color, className, onDelete }) {
         <button
           className="ml-2 text-white"
           title="Remove label"
-          onClick={onDelete}
+          onMouseUp={onDelete}
         >
           <Icon width="16" height="16" icon="cross" />
         </button>
